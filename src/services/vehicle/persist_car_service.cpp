@@ -283,10 +283,15 @@ namespace big
 			VEHICLE::SET_VEHICLE_LIVERY(vehicle, vehicle_json[vehicle_livery_key]);
 		}
 
+		if (!vehicle_json[vehicle_livery2_key].is_null())
+		{
+			VEHICLE::SET_VEHICLE_LIVERY2(vehicle, vehicle_json[vehicle_livery2_key]);
+		}
+
 		if (VEHICLE::IS_THIS_MODEL_A_CAR(ENTITY::GET_ENTITY_MODEL(vehicle)) || VEHICLE::IS_THIS_MODEL_A_BIKE(ENTITY::GET_ENTITY_MODEL(vehicle)))
 		{
 			VEHICLE::SET_VEHICLE_WHEEL_TYPE(vehicle, vehicle_json[wheel_type_key]);
-			for (int i = MOD_SPOILERS; i < MOD_LIGHTBAR; i++)
+			for (int i = MOD_SPOILERS; i <= MOD_LIGHTBAR; i++)
 			{
 				const bool has_mod = !vehicle_json[mod_names[i]].is_null();
 				if (has_mod)
@@ -513,11 +518,16 @@ namespace big
 			vehicle_json[vehicle_livery_key] = VEHICLE::GET_VEHICLE_LIVERY(vehicle);
 		}
 
+		if ((VEHICLE::GET_VEHICLE_LIVERY2_COUNT(vehicle) > 1) && VEHICLE::GET_VEHICLE_LIVERY2(vehicle) >= 0)
+		{
+			vehicle_json[vehicle_livery2_key] = VEHICLE::GET_VEHICLE_LIVERY2(vehicle);
+		}
+
 		if (VEHICLE::IS_THIS_MODEL_A_CAR(ENTITY::GET_ENTITY_MODEL(vehicle)) || VEHICLE::IS_THIS_MODEL_A_BIKE(ENTITY::GET_ENTITY_MODEL(vehicle)))
 		{
 			vehicle_json[wheel_type_key] = VEHICLE::GET_VEHICLE_WHEEL_TYPE(vehicle);
 
-			for (int i = MOD_SPOILERS; i <= MOD_LIVERY; i++)
+			for (int i = MOD_SPOILERS; i <= MOD_LIGHTBAR; i++)
 			{
 				const auto is_mod_on = VEHICLE::IS_TOGGLE_MOD_ON(vehicle, i);
 				if (is_mod_on)

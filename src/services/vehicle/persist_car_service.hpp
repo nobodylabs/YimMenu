@@ -39,6 +39,7 @@ namespace big
 		static constexpr auto vehicle_extras_key = "vehicle_extras";
 
 		static constexpr auto vehicle_livery_key = "vehicle_livery";
+		static constexpr auto vehicle_livery2_key = "vehicle_livery2";
 
 		static constexpr auto wheel_type_key       = "wheel_type";
 		static constexpr auto wheel_color_key      = "wheel_color";
