@@ -64,11 +64,12 @@ namespace big
 		nlohmann::json m_options;
 
 	public:
+		// * not intended to be saved
 		int friend_count = 0;
 		int player_count = 0;
 
 		CNetGamePlayer* m_syncing_player  = nullptr;
-		std::uint8_t m_sync_target_player  = -1;
+		std::uint8_t m_sync_target_player = -1;
 		eNetObjType m_syncing_object_type = (eNetObjType)-1;
 
 		int m_remote_controller_vehicle = -1;
@@ -82,38 +83,40 @@ namespace big
 		rage::scrProgram* m_dance_program = nullptr;
 
 		rage::scrThread* m_mission_creator_thread = nullptr;
+		// *
 
 		struct script_block_opts
 		{
-			bool lsc = false;
-			bool atms = false;
-			bool interiors = false;
-			bool drones    = false;
-			bool strip_club = false;
-			bool ammunation = false;
-			bool stores     = false;
-			bool sitting    = false;
-			bool sleeping    = false;
-			bool casino_games = false;
-			bool arcade_games = false;
-			bool prostitutes  = false;
-			bool movies       = false;
-			bool street_dealer = false;
-			bool impromptu_dm   = false;
-			bool impromptu_race = false;
-			bool gang_attacks   = false;
+			bool lsc              = false;
+			bool atms             = false;
+			bool interiors        = false;
+			bool drones           = false;
+			bool strip_club       = false;
+			bool ammunation       = false;
+			bool stores           = false;
+			bool sitting          = false;
+			bool sleeping         = false;
+			bool casino_games     = false;
+			bool arcade_games     = false;
+			bool prostitutes      = false;
+			bool movies           = false;
+			bool street_dealer    = false;
+			bool impromptu_dm     = false;
+			bool impromptu_race   = false;
+			bool gang_attacks     = false;
 			bool vending_machines = false;
 
 			NLOHMANN_DEFINE_TYPE_INTRUSIVE(script_block_opts, lsc, atms, interiors, drones, strip_club, ammunation, stores, sitting, sleeping, casino_games, arcade_games, prostitutes, movies, street_dealer, impromptu_dm, impromptu_race, gang_attacks, vending_machines);
 		};
 
+		// ! not being saved
 		struct cmd_executor
 		{
 			bool enabled = false;
 		} cmd_executor{};
 
-		rage::scrThread* m_modshop_thread = nullptr;
-		bool in_script_vm                 = false;
+		rage::scrThread* m_modshop_thread = nullptr; // * not intended to be saved
+		bool in_script_vm                 = false;   // * not intended to be saved
 
 		struct debug
 		{
@@ -131,7 +134,7 @@ namespace big
 					bool filter_player    = true;
 					std::int8_t player_id = -1;
 
-					bool block_all = false; //should not save
+					bool block_all = false; // * not intended to be saved
 
 					NLOHMANN_DEFINE_TYPE_INTRUSIVE(script_event, logs, filter_player, player_id)
 				} script_event{};
@@ -139,6 +142,7 @@ namespace big
 				NLOHMANN_DEFINE_TYPE_INTRUSIVE(logs, metric_logs, packet_logs, script_hook_logs, script_event)
 			} logs{};
 
+			// ! not being saved
 			struct fuzzer
 			{
 				bool enabled = false;
@@ -148,8 +152,8 @@ namespace big
 				std::int16_t syncing_object_id = -1;
 			} fuzzer{};
 
-			bool external_console = true;
-			bool window_hook = false;
+			bool external_console  = true;
+			bool window_hook       = false;
 			bool block_all_metrics = false;
 
 			NLOHMANN_DEFINE_TYPE_INTRUSIVE(debug, logs, external_console, window_hook, block_all_metrics)
@@ -328,8 +332,8 @@ namespace big
 				bool show          = false;
 				float size         = 0.2f;
 				int select         = 0;
-				const char* asset  = "scr_agencyheist";
-				const char* effect = "scr_fbi_mop_drips";
+				const char* asset  = "scr_agencyheist";   // ! not being saved
+				const char* effect = "scr_fbi_mop_drips"; // ! not being saved
 
 				NLOHMANN_DEFINE_TYPE_INTRUSIVE(ptfx_effects, show, size)
 			} ptfx_effects{};
@@ -374,7 +378,7 @@ namespace big
 			bool auto_tp                      = false;
 			bool super_jump                   = false;
 			bool beast_jump                   = false;
-			bool graceful_landing			  = false;	
+			bool graceful_landing             = false;
 			bool healthregen                  = false;
 			float healthregenrate             = 1.0f;
 			bool superman                     = false;
@@ -389,7 +393,7 @@ namespace big
 				bool color_override                                      = false;
 				bool color_override_initialized                          = false;
 				std::array<color, hud_colors.size()> hud_color_overrides = {};
-				std::array<color, hud_colors.size()> hud_color_defaults  = {}; // don't save
+				std::array<color, hud_colors.size()> hud_color_defaults  = {}; // * not intended to be saved
 
 				bool hide_radar                            = false;
 				bool hide_ammo                             = false;
@@ -397,16 +401,16 @@ namespace big
 				std::array<bool, 22> hud_components_states = {false};
 				bool force_show_hud_element                = false;
 				bool force_show_hud                        = false;
-				std::atomic_uint_fast8_t typing            = 0;
+				std::atomic_uint_fast8_t typing            = 0; // * not intended to be saved
 
 				NLOHMANN_DEFINE_TYPE_INTRUSIVE(hud, color_override, color_override_initialized, hud_color_overrides, hide_radar, hide_ammo, selected_hud_component, hud_components_states, force_show_hud_element, force_show_hud)
 			} hud{};
-			// do not save below entries
-			bool dance_mode = false;
+
+			bool dance_mode = false; // * not intended to be saved
 
 			struct super_hero_fly
 			{
-				bool enabled         = false;
+				bool enabled         = false; // ! not being saved
 				bool gradual         = true;
 				bool explosions      = true;
 				bool auto_land       = false;
@@ -439,18 +443,18 @@ namespace big
 			bool lock_session                      = false;
 			bool allow_friends_into_locked_session = false;
 			bool trust_friends                     = false;
-			bool trust_session                     = false;
+			bool trust_session                     = false; // * not intended to be saved
 			bool use_spam_timer                    = true;
 			float spam_timer                       = 2.5f;
 			int spam_length                        = 55;
 
-			const char chat_command_prefix = '/';
-			const char chat_output_prefix  = '>';
+			const char chat_command_prefix = '/'; // ! not being saved
+			const char chat_output_prefix  = '>'; // ! not being saved
 
 			bool chat_commands                                   = false;
 			CommandAccessLevel chat_command_default_access_level = CommandAccessLevel::FRIENDLY;
 
-			bool kick_host_when_forcing_host = false;
+			bool kick_host_when_forcing_host = false; // ! not used atm
 
 			bool explosion_karma = false;
 			bool damage_karma    = false;
@@ -471,10 +475,10 @@ namespace big
 
 			script_block_opts script_block_opts;
 
-			// not to be saved
+			// * not intended to be saved
 			std::atomic_bool spoof_host_token_dirty = true;
-			std::uint64_t original_host_token = 0;
-			bool join_queued = false;
+			std::uint64_t original_host_token       = 0;
+			bool join_queued                        = false;
 			rage::rlSessionInfo info;
 			bool never_wanted_all = false;
 			bool off_radar_all    = false;
@@ -486,8 +490,7 @@ namespace big
 
 			bool show_cheating_message = false;
 			bool anonymous_bounty      = true;
-
-			bool fast_join = false;
+			bool fast_join             = false;
 
 			struct chat_translator
 			{
@@ -507,12 +510,12 @@ namespace big
 		struct settings
 		{
 			bool onboarding_complete = false;
-			bool dev_dlc = false;
+			bool dev_dlc             = false;
 
 			struct hotkeys
 			{
 				bool editing_menu_toggle = false;
-				std::atomic<bool> is_mp_chat_active;
+				std::atomic<bool> is_mp_chat_active; // * not intended to be saved
 				int menu_toggle             = VK_INSERT;
 				int teleport_waypoint       = 0;
 				int teleport_objective      = 0;
@@ -583,7 +586,7 @@ namespace big
 		{
 			struct orbital_drone
 			{
-				bool enabled             = false;
+				bool enabled             = false; // * not intended to be saved
 				bool detect_player       = false;
 				float nav_ovverride_fast = 3.f;
 				float nav_ovverride_slow = 0.25f;
@@ -593,9 +596,10 @@ namespace big
 
 			struct train
 			{
+				// * not intended to be saved
 				bool drive_train  = false;
 				bool derail_train = false;
-			} train{};
+			} train{}; // ! not being saved
 
 			struct water
 			{
@@ -604,6 +608,7 @@ namespace big
 				NLOHMANN_DEFINE_TYPE_INTRUSIVE(water, part_water)
 			} water{};
 
+			// ! not being saved
 			struct gravity
 			{
 				bool modify_gravity   = false;
@@ -612,6 +617,7 @@ namespace big
 				NLOHMANN_DEFINE_TYPE_INTRUSIVE(gravity, modify_gravity, current_gravity)
 			} gravity{};
 
+			// ! not being saved
 			struct ocean
 			{
 				bool modify_ocean  = false;
@@ -653,13 +659,13 @@ namespace big
 
 			struct blackhole
 			{
-				bool enable           = false;
+				bool enable           = false; // * not intended to be saved
 				bool include_peds     = false;
 				bool include_vehicles = false;
-				float scale           = 6.f;
+				float scale           = 6.f; // ! not being saved
 				float color[3]        = {1, 1, 1};
 				int alpha             = 150;
-				rage::fvector3 pos;
+				rage::fvector3 pos; // * not intended to be saved
 
 				NLOHMANN_DEFINE_TYPE_INTRUSIVE(blackhole, include_peds, include_vehicles, color, alpha)
 			} blackhole{};
@@ -667,8 +673,8 @@ namespace big
 			struct nearby
 			{
 				bool ignore     = false;
-				bool ped_rain   = false;
-				bool veh_rain   = false;
+				bool ped_rain   = false; // ! not being saved
+				bool veh_rain   = false; // ! not being saved
 				bool high_alert = false;
 				bool ped_rush   = false;
 				bool combative  = false;
@@ -686,8 +692,8 @@ namespace big
 			struct model_swapper
 			{
 				std::vector<std::pair<std::string, std::string>> models;
-				std::mutex m;
-				bool update = false;
+				std::mutex m;        // * not intended to be saved
+				bool update = false; // * not intended to be saved
 
 				NLOHMANN_DEFINE_TYPE_INTRUSIVE(model_swapper, models)
 			} model_swapper{};
@@ -699,7 +705,7 @@ namespace big
 			bool blackout    = false;
 			bool ground_snow = false;
 
-			NLOHMANN_DEFINE_TYPE_INTRUSIVE(world, water, spawn_ped, custom_time, blackhole, model_swapper, nearby, orbital_drone, local_weather, override_weather, blackout, ground_snow)
+			NLOHMANN_DEFINE_TYPE_INTRUSIVE(world, water, waypoint_n_objective, spawn_ped, custom_time, blackhole, model_swapper, nearby, orbital_drone, local_weather, override_weather, blackout, ground_snow)
 		} world{};
 
 		struct spoofing
@@ -723,7 +729,7 @@ namespace big
 
 			bool spoof_player_model   = false;
 			std::string player_model  = "";
-			std::string player_outfit = "";
+			std::string player_outfit = ""; // ! not being saved
 
 			bool spoof_cheater = false;
 
@@ -736,16 +742,16 @@ namespace big
 			bool rockstar_crew   = false;
 			bool square_crew_tag = false;
 
-			bool spoof_session_region_type      = false;
-			int session_region_type             = 0;
-			bool spoof_session_language         = false;
-			int session_language                = 0;
-			bool spoof_session_player_count     = false;
-			int session_player_count            = 25;
-			int spoof_session_bad_sport_status  = 0;
-			bool multiplex_session              = false;
-			int multiplex_count                 = 2;
-			bool increase_player_limit          = false;
+			bool spoof_session_region_type     = false;
+			int session_region_type            = 0;
+			bool spoof_session_language        = false;
+			int session_language               = 0;
+			bool spoof_session_player_count    = false;
+			int session_player_count           = 25;
+			int spoof_session_bad_sport_status = 0;
+			bool multiplex_session             = false;
+			int multiplex_count                = 2;
+			bool increase_player_limit         = false;
 
 			bool voice_chat_audio = false;
 
@@ -754,9 +760,7 @@ namespace big
 			bool spoof_dlc_hash = false;
 			std::uint32_t dlc_hash;
 
-			// do not save
-
-			bool game_data_hash_dirty = true;
+			bool game_data_hash_dirty = true; // * not intended to be saved
 
 			NLOHMANN_DEFINE_TYPE_INTRUSIVE(spoofing, hide_from_player_list, spoof_blip, blip_type, spoof_rank, rank, spoof_job_points, job_points, spoof_kd_ratio, kd_ratio, spoof_bad_sport, badsport_type, spoof_player_model, player_model, spoof_cheater, spoof_hide_god, spoof_hide_veh_god, spoof_hide_spectate, spoof_crew_data, crew_tag, rockstar_crew, square_crew_tag, spoof_session_region_type, session_region_type, spoof_session_language, session_language, spoof_session_player_count, session_player_count, spoof_session_bad_sport_status, multiplex_session, multiplex_count, increase_player_limit, voice_chat_audio, spoof_game_data_hash, game_data_hash, spoof_dlc_hash, dlc_hash)
 		} spoofing{};
@@ -818,9 +822,9 @@ namespace big
 			bool drive_on_water                         = false;
 			bool horn_boost                             = false;
 			bool instant_brake                          = false;
-			bool infinite_veh_ammo					    = false;
+			bool infinite_veh_ammo                      = false;
 			bool block_homing                           = true;
-			bool ls_customs                             = false; // don't save this to disk
+			bool ls_customs                             = false; // * not intended to be saved
 			bool seatbelt                               = false;
 			bool turn_signals                           = false;
 			bool vehicle_jump                           = false;
@@ -840,7 +844,8 @@ namespace big
 
 			struct abilities
 			{
-				bool enabled   = false;
+				bool enabled = false;
+				// ! not being saved
 				bool jump      = false;
 				bool rocket    = false;
 				bool parachute = false;
@@ -906,7 +911,7 @@ namespace big
 			struct paintgun
 			{
 				bool rainbow = false;
-				float speed  = 1.f;
+				float speed  = 1.f; // ! not being saved
 				float col[4] = {0.f, 0.f, 1.f, 1.f};
 				NLOHMANN_DEFINE_TYPE_INTRUSIVE(paintgun, rainbow, col)
 			} paintgun{};
@@ -922,13 +927,14 @@ namespace big
 				bool on_npc            = false;
 				float fov              = 90.f;
 				float distance         = 200.f;
-				uint32_t selected_bone = 0x796E; // Default to head
+				uint32_t selected_bone = 0x796E; // ! not being saved (default to head)
 				NLOHMANN_DEFINE_TYPE_INTRUSIVE(aimbot, enable, smoothing, smoothing_speed, on_player, on_enemy, on_police, on_npc, fov, distance)
 			} aimbot{};
 
+			// ! not being saved
 			struct flying_axe
 			{
-				bool enable            = false;
+				bool enable = false;
 				NLOHMANN_DEFINE_TYPE_INTRUSIVE(flying_axe, enable)
 			} flying_axe{};
 
@@ -964,6 +970,7 @@ namespace big
 			ImU32 frame_color      = 2942518340;
 			float gui_scale        = 1.f;
 
+			// * not intended to be saved
 			ImFont* font_title     = nullptr;
 			ImFont* font_sub_title = nullptr;
 			ImFont* font_small     = nullptr;
@@ -1006,7 +1013,7 @@ namespace big
 
 			struct vehicle_control
 			{
-				bool opened                 = false;
+				bool opened                 = false; // ! not being saved
 				bool operation_animation    = true;
 				bool render_distance_on_veh = false;
 				bool show_info              = false;
@@ -1085,11 +1092,12 @@ namespace big
 			int sort_direction = 0;
 
 			bool replace_game_matchmaking = false;
-			bool exclude_modder_sessions     = false;
+			bool exclude_modder_sessions  = false;
 
 			NLOHMANN_DEFINE_TYPE_INTRUSIVE(session_browser, region_filter_enabled, region_filter, language_filter_enabled, language_filter, player_count_filter_enabled, player_count_filter_minimum, player_count_filter_maximum, filter_multiplexed_sessions, sort_method, sort_direction, replace_game_matchmaking, pool_filter_enabled, pool_filter, exclude_modder_sessions)
 		} session_browser{};
 
+		// ! not being saved
 		struct session_protection
 		{
 			int block_join_reason = 0;
