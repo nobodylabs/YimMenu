@@ -288,7 +288,7 @@ namespace big
 			VEHICLE::SET_VEHICLE_LIVERY2(vehicle, vehicle_json[vehicle_livery2_key]);
 		}
 
-		if (VEHICLE::IS_THIS_MODEL_A_CAR(ENTITY::GET_ENTITY_MODEL(vehicle)) || VEHICLE::IS_THIS_MODEL_A_BIKE(ENTITY::GET_ENTITY_MODEL(vehicle)))
+		if (VEHICLE::IS_VEHICLE_DRIVEABLE(vehicle, false)) // ? this is not even needed
 		{
 			VEHICLE::SET_VEHICLE_WHEEL_TYPE(vehicle, vehicle_json[wheel_type_key]);
 			for (int i = MOD_SPOILERS; i <= MOD_LIGHTBAR; i++)
@@ -523,7 +523,7 @@ namespace big
 			vehicle_json[vehicle_livery2_key] = VEHICLE::GET_VEHICLE_LIVERY2(vehicle);
 		}
 
-		if (VEHICLE::IS_THIS_MODEL_A_CAR(ENTITY::GET_ENTITY_MODEL(vehicle)) || VEHICLE::IS_THIS_MODEL_A_BIKE(ENTITY::GET_ENTITY_MODEL(vehicle)))
+		if (VEHICLE::IS_VEHICLE_DRIVEABLE(vehicle, false)) // ? this is not even needed
 		{
 			vehicle_json[wheel_type_key] = VEHICLE::GET_VEHICLE_WHEEL_TYPE(vehicle);
 
