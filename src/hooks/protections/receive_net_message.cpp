@@ -1,6 +1,5 @@
 #include "backend/command.hpp"
 #include "backend/context/chat_command_context.hpp"
-#include "backend/player_command.hpp"
 #include "core/data/packet_types.hpp"
 #include "gta/enums.hpp"
 #include "gta/net_game_event.hpp"
@@ -8,7 +7,6 @@
 #include "hooking/hooking.hpp"
 #include "lua/lua_manager.hpp"
 #include "natives.hpp"
-#include "script/scriptIdBase.hpp"
 #include "services/players/player_service.hpp"
 #include "util/chat.hpp"
 #include "util/session.hpp"
@@ -686,9 +684,12 @@ namespace big
 		case rage::eNetMessage::MsgTextMessage2:
 		{
 			char message[256];
+			char guid[40];
 			rage::rlGamerHandle handle{};
 			bool is_team;
 			buffer.ReadString(message, sizeof(message));
+			if (msgType == rage::eNetMessage::MsgTextMessage)
+				buffer.ReadString(guid, sizeof(guid));
 			gamer_handle_deserialize(handle, buffer);
 			is_team = buffer.Read<bool>(1);
 

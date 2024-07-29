@@ -1,12 +1,9 @@
 #include "core/data/block_join_reasons.hpp"
 #include "core/data/command_access_levels.hpp"
-#include "core/data/infractions.hpp"
-#include "fiber_pool.hpp"
 #include "gta/enums.hpp"
 #include "pointers.hpp"
 #include "services/api/api_service.hpp"
 #include "services/player_database/player_database_service.hpp"
-#include "services/players/player_service.hpp"
 #include "util/session.hpp"
 #include "views/view.hpp"
 
@@ -28,7 +25,7 @@ namespace big
 			return ImVec4(.5f, .5f, .5f, 1.0f);
 		else if (player.session_type == GSType::Invalid)
 			return ImVec4(1.f, 0.f, 0.f, 1.f);
-		else if (!player_database_service::is_joinable_session(player.session_type))
+		else if (!player_database_service::is_joinable_session(player.session_type, player.game_mode))
 			return ImVec4(1.f, 1.f, 0.f, 1.f);
 		else
 			return ImVec4(0.f, 1.f, 0.f, 1.f);
@@ -103,13 +100,13 @@ namespace big
 
 				for (auto& player : item_arr | std::ranges::views::values)
 				{
-					if (player_database_service::is_joinable_session(player->session_type))
+					if (player_database_service::is_joinable_session(player->session_type, player->game_mode))
 						draw_player_db_entry(player, lower_search);
 				}
 
 				for (auto& player : item_arr | std::ranges::views::values)
 				{
-					if (!player_database_service::is_joinable_session(player->session_type) && player->session_type != GSType::Invalid
+					if (!player_database_service::is_joinable_session(player->session_type, player->game_mode) && player->session_type != GSType::Invalid
 					    && player->session_type != GSType::Unknown)
 						draw_player_db_entry(player, lower_search);
 				}
@@ -231,9 +228,14 @@ namespace big
 					ImGui::SliderInt("VIEW_NET_PLAYER_DB_PREFERENCE"_T.data(), &current_player->join_redirect_preference, 1, 10);
 				}
 
+				bool joinable =
+				    player_database_service::is_joinable_session(current_player->session_type, current_player->game_mode);
+
+				ImGui::BeginDisabled(!joinable);
 				components::button("JOIN_SESSION"_T, [] {
 					session::join_by_rockstar_id(current_player->rockstar_id);
 				});
+				ImGui::EndDisabled();
 
 				ImGui::SameLine();
 

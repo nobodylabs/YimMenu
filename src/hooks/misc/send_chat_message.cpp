@@ -1,9 +1,6 @@
 #include "backend/command.hpp"
 #include "backend/context/chat_command_context.hpp"
-#include "gta/net_game_event.hpp"
-#include "gta_util.hpp"
 #include "hooking/hooking.hpp"
-#include "packet.hpp"
 #include "services/players/player_service.hpp"
 #include "util/chat.hpp"
 
@@ -14,11 +11,11 @@ namespace big
 		if (g.session.chat_commands && message[0] == g.session.chat_command_prefix)
 			command::process(std::string(message + 1), std::make_shared<chat_command_context>(g_player_service->get_self()));
 
-		// chat::send_message(message, nullptr, false, is_team);
+		chat::send_message(message, nullptr, false, is_team);
 
 		if (g.session.log_chat_messages)
 			chat::log_chat(message, g_player_service->get_self(), SpamReason::NOT_A_SPAMMER, is_team);
 
-		return g_hooking->get_original<hooks::send_chat_message>()(team_mgr, local_gamer_info, message, is_team);
+		return true;
 	}
 }

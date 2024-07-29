@@ -1,15 +1,8 @@
-﻿#include "core/data/apartment_names.hpp"
-#include "core/data/region_codes.hpp"
-#include "core/data/warehouse_names.hpp"
-#include "fiber_pool.hpp"
+﻿#include "fiber_pool.hpp"
 #include "gta_util.hpp"
-#include "hooking/hooking.hpp"
-#include "util/scripts.hpp"
-#include "util/session.hpp"
 #include "util/troll.hpp"
 #include "util/toxic.hpp"
 #include "views/view.hpp"
-#include "backend/bool_command.hpp"
 
 #include <network/Network.hpp>
 #include <script/globals/GPBD_FM_3.hpp>
@@ -178,11 +171,18 @@ namespace big
 
 		ImGui::EndDisabled();
 
-		//if (g.session.force_session_host)
-		//{
-		//	ImGui::SameLine();
-		//	ImGui::Checkbox("KICK_HOST_ON_JOIN"_T.data(), &g.session.kick_host_when_forcing_host);
-		//}
+		if (g.session.spoof_host_token_type != 0)
+		{
+			ImGui::Checkbox("KICK_HOST_ON_JOIN"_T.data(), &g.session.kick_host_when_forcing_host);
+
+			if (g.session.kick_host_when_forcing_host)
+			{
+				ImGui::SameLine();
+				ImGui::Checkbox("EXCLUDE_MODDERS_FROM_KICK_HOST"_T.data(), &g.session.exclude_modders_from_kick_host);
+				if (ImGui::IsItemHovered())
+					ImGui::SetTooltip("EXCLUDE_MODDERS_FROM_KICK_HOST_DESC"_T.data());
+			}
+		}
 
 		ImGui::Checkbox("FORCE_SCRIPT_HOST"_T.data(), &g.session.force_script_host);
 		if (ImGui::IsItemHovered())

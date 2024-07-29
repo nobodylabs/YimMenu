@@ -2,6 +2,7 @@
 #include "backend/reactions/interloper_reaction.hpp"
 #include "backend/reactions/reaction.hpp"
 #include "core/data/hud_colors.hpp"
+#include "core/data/language_codes.hpp"
 #include "core/data/ptfx_effects.hpp"
 #include "enums.hpp"
 #include "file_manager.hpp"
@@ -448,7 +449,8 @@ namespace big
 			bool chat_commands                                   = false;
 			CommandAccessLevel chat_command_default_access_level = CommandAccessLevel::FRIENDLY;
 
-			bool kick_host_when_forcing_host = false; // ! not used atm
+			bool kick_host_when_forcing_host = false;
+			bool exclude_modders_from_kick_host = false;
 
 			bool explosion_karma = false;
 			bool damage_karma    = false;
@@ -497,7 +499,7 @@ namespace big
 				NLOHMANN_DEFINE_TYPE_INTRUSIVE(chat_translator, enabled, print_result, draw_result, bypass_same_language, target_language, endpoint);
 			} chat_translator{};
 
-			NLOHMANN_DEFINE_TYPE_INTRUSIVE(session, log_chat_messages, log_text_messages, decloak_players, spoof_host_token_type, custom_host_token, hide_token_spoofing_when_host, force_script_host, player_magnet_enabled, player_magnet_count, is_team, join_in_sctv_slots, kick_host_when_forcing_host, explosion_karma, damage_karma, disable_traffic, disable_peds, force_thunder, block_ceo_money, randomize_ceo_colors, block_jobs, block_muggers, block_ceo_raids, block_ceo_creation, send_to_apartment_idx, send_to_warehouse_idx, chat_commands, chat_command_default_access_level, anonymous_bounty, lock_session, fast_join, unhide_players_from_player_list, allow_friends_into_locked_session, trust_friends, use_spam_timer, spam_timer, spam_length, chat_translator, script_block_opts)
+			NLOHMANN_DEFINE_TYPE_INTRUSIVE(session, log_chat_messages, log_text_messages, decloak_players, spoof_host_token_type, custom_host_token, hide_token_spoofing_when_host, force_script_host, player_magnet_enabled, player_magnet_count, is_team, join_in_sctv_slots, kick_host_when_forcing_host, exclude_modders_from_kick_host, explosion_karma, damage_karma, disable_traffic, disable_peds, force_thunder, block_ceo_money, randomize_ceo_colors, block_jobs, block_muggers, block_ceo_raids, block_ceo_creation, send_to_apartment_idx, send_to_warehouse_idx, chat_commands, chat_command_default_access_level, anonymous_bounty, lock_session, fast_join, unhide_players_from_player_list, allow_friends_into_locked_session, trust_friends, use_spam_timer, spam_timer, spam_length, chat_translator, script_block_opts)
 		} session{};
 
 		struct settings
@@ -726,16 +728,16 @@ namespace big
 			bool rockstar_crew   = false;
 			bool square_crew_tag = false;
 
-			bool spoof_session_region_type     = false;
-			int session_region_type            = 0;
-			bool spoof_session_language        = false;
-			int session_language               = 0;
-			bool spoof_session_player_count    = false;
-			int session_player_count           = 25;
-			int spoof_session_bad_sport_status = 0;
-			bool multiplex_session             = false;
-			int multiplex_count                = 2;
-			bool increase_player_limit         = false;
+			bool spoof_session_region_type      = false;
+			int session_region_type             = 0;
+			bool spoof_session_language         = false;
+			eGameLanguage session_language      = eGameLanguage::ENGLISH;
+			bool spoof_session_player_count     = false;
+			int session_player_count            = 25;
+			int spoof_session_bad_sport_status  = 0;
+			bool multiplex_session              = false;
+			int multiplex_count                 = 2;
+			bool increase_player_limit          = false;
 
 			bool voice_chat_audio = false;
 
@@ -905,8 +907,10 @@ namespace big
 				bool enable              = false;
 				int64_t only_on_ped_type = -1;
 				bool only_on_player      = false;
+				bool exclude_friends     = false;
 				bool only_on_enemy       = false;
 				bool has_target          = false;
+				bool use_weapon_range    = false;
 				float fov                = 60.f;
 				float distance           = 200.f;
 				int32_t selected_bone    = (int32_t)ePedBoneType::HEAD;
@@ -1060,7 +1064,7 @@ namespace big
 			int region_filter          = 0;
 
 			bool language_filter_enabled = false;
-			int language_filter          = 0;
+			eGameLanguage language_filter = eGameLanguage::ENGLISH;
 
 			bool pool_filter_enabled = false;
 			int pool_filter          = 0;
